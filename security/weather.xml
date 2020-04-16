@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Main group Weather -->
+    <record id="weather_module_management" model="ir.module.category">
+        <field name="name">Weather</field>
+        <field name="description">Weather access</field>
+        <field name="sequence">3</field>
+    </record>
+    <!-- Basic group of users -->
+    <record id="weather_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="weather_module_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">User can manage measurements of weather point that responds of.</field>
+    </record>
+    <!-- Basic group of managers -->
+    <record id="weather_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="weather_module_management"/>
+        <!-- Inheriting user rights -->
+        <field name="implied_ids" eval="[(4, ref('weather_user'))]"/>
+        <!-- Adding admin and superuser -->
+        <field name="users" eval="[(4, ref('base.user_admin')),(4, ref('base.user_root'))]"/>
+        <field name="comment">Manager can manage measurement points and measurements.</field>
+    </record>
+    <!-- Rule - users can see only weather points that they are responding of.-->
+    <record id="weather_point_rule_user" model="ir.rule">
+        <field name="name">User points</field>
+        <field ref="model_weather_measurement_point" name="model_id"/>
+        <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('weather_user'))]"/>
+    </record>
+    <!-- Rule - managers have full access to weather points -->
+    <record id="weather_point_rule_manager" model="ir.rule">
+        <field name="name">Manager points</field>
+        <field ref="model_weather_measurement_point" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('weather_manager'))]"/>
+    </record>
+    <!-- Rule - users can see only measurements that they created.-->
+    <record id="measurements_rule_user" model="ir.rule">
+        <field name="name">User points</field>
+        <field ref="model_weather_measurements" name="model_id"/>
+        <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('weather_user'))]"/>
+    </record>
+    <!-- Rule - managers have full access to measurements -->
+    <record id="measurements_rule_manager" model="ir.rule">
+        <field name="name">Manager points</field>
+        <field ref="model_weather_measurements" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('weather_manager'))]"/>
+    </record>
+
+</odoo>

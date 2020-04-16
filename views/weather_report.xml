@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Pivot view for weather report -->
+    <record id="weather_report_pivot" model="ir.ui.view">
+        <field name="name">weather.report.pivot</field>
+        <field name="model">weather.measurements.report</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="date" type="col" />
+                <field name="measurement_point_id" type="row" />
+            </pivot>
+        </field>
+    </record>
+    <!-- Graph view for weather report -->
+    <record id="weather_report_graph" model="ir.ui.view">
+        <field name="name">weather.report.graph</field>
+        <field name="model">weather.measurements.report</field>
+        <field name="arch" type="xml">
+            <graph>
+                <field name="measurement_point_id" type="col"/>
+                <field name="temperature_max" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <!-- Tree for Measurements report -->
+    <record id="weather_report_tree" model="ir.ui.view">
+        <field name="name">weather.report.tree</field>
+        <field name="model">weather.measurements.report</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="measurement_point_id"/>
+                <field name="city_id"/>
+                <field name="state_id"/>
+                <field name="country_id"/>
+                <field name="date"/>
+                <field name="temperature_min"/>
+                <field name="temperature_max"/>
+                <field name="temperature_avg"/>
+                <field name="humidity_min"/>
+                <field name="humidity_max"/>
+                <field name="humidity_avg"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Action to show report measurement tree -->
+    <record id="report_tree_action" model="ir.actions.act_window">
+        <field name="name">Report action</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">weather.measurements.report</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <!-- Child menu Item Measurement Point -->
+    <menuitem id="measurement_report_menu"
+              name="Report"
+              parent="weather_menu"
+              action="report_tree_action"
+              sequence=""/>
+</odoo>

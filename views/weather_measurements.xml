@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form for Weather Measurements-->
+    <record id="weather_measurements_form" model="ir.ui.view">
+        <field name="name">weather.measurement.form</field>
+        <field name="model">weather.measurements</field>
+        <field name="arch" type="xml">
+            <form string="Weather measurement">
+                <sheet>
+                    <group>
+                        <field name="measurement_point_id"/>
+                        <field name="date"/>
+                        <field name="user_id"/>
+                    </group>
+                    <group>
+                        <field name="temperature"/>
+                        <field name="humidity"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Tree for Weather Measurements-->
+    <record id="weather_measurements_tree" model="ir.ui.view">
+        <field name="name">weather.measurements.tree</field>
+        <field name="model">weather.measurements</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date"/>
+                <field name="measurement_point_id"/>
+                <field name="user_id"/>
+                <field name="temperature" avg="Average temperature"/>
+                <field name="humidity" avg="Average humidity"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Search view for Weather Measurements -->
+    <record id="weather_measurement_search" model="ir.ui.view">
+       <field name="name">weather.measurements.search</field>
+       <field name="model">weather.measurements</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="measurement_point_id"/>
+                <field name="user_id"/>
+                <filter string="Today" name="Today"
+                        domain="[('date','&lt;',(context_today()+relativedelta(days=1)).strftime('%Y-%m-%d 23:59:59')),
+                        ('date','&gt;=',context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
+                <group string="Group By">
+                    <filter name="by_date" string="Date"
+                            context="{'group_by': 'date'}"/>
+                    <filter name="by_measurement_point" string="Measurement point"
+                            context="{'group_by': 'measurement_point_id'}"/>
+                    <filter name="by_user_id" string="Responsible"
+                            context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+       </field>
+    </record>
+    <!-- Action to show Weather Measurements-->
+    <record id="weather_measurements_action" model="ir.actions.act_window">
+        <field name="name">Weather measurements</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">weather.measurements</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            There are no measurements at the moment.
+          </p><p>
+            Add one!
+          </p>
+        </field>
+    </record>
+    <!-- Child menu for Weather Measurements -->
+    <menuitem id="weather_measurements_categ"
+              name="Measurements"
+              parent="weather_menu"
+              action="weather_measurements_action"
+              sequence=""/>
+</odoo>
