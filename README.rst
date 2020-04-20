@@ -1,5 +1,5 @@
 ==========================
-Weather measurement module
+Weather measurement module for Odoo 13.0 CE
 ==========================
 
 --------------------------
